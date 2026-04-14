@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Saga do Malte - HQ Histórica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Kalam:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --comic-yellow: #facc15;
+            --comic-red: #ef4444;
+            --paper-texture: #fdfaf0;
+        }
+
+        body {
+            background-color: transparent;
+            font-family: 'Kalam', cursive;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .comic-container {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background-color: var(--paper-texture);
+            border: 6px solid #000;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.15);
+        }
+
+        .page {
+            position: absolute;
+            inset: 0;
+            display: none;
+            padding: 25px;
+            animation: pageFlip 0.6s ease-out;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes pageFlip {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .comic-panel {
+            border: 3px solid #000;
+            background-color: #e5e7eb;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            box-shadow: 3px 3px 0px #000;
+            overflow: hidden;
+        }
+
+        /* CONFIGURAÇÃO DAS IMAGENS MANUAIS */
+        /* Substitua o nome do arquivo dentro de url('...') pelo caminho da imagem no seu computador */
+        #img_chegada { background-image: url('./imagens/hq_agraria_painel_3.png'); }
+        #img_trem { background-image: url('./imagens/hq_agraria_painel_1.png'); }
+        #img_caminhao { background-image: url('./imagens/hq_agraria_painel_2.png'); }
+        #img_colegio { background-image: url('./imagens/hq_agraria_painel_4.png'); }
+        #img_colonias { background-image: url('./imagens/hq_agraria_painel_6.png'); }
+        #img_trabalho { background-image: url('./imagens/hq_agraria_painel_5.png'); }
+        #img_uniao { background-image: url('./imagens/hq_agraria_painel_7.png'); }
+        #img_cevada { background-image: url('./imagens/hq_agraria_painel_8.png'); }
+        #img_fabrica { background-image: url('./imagens/hq_agraria_painel_9.png'); }
+        #img_brinde { background-image: url('./imagens/hq_agraria_painel_10.png'); }
+
+        .caption-box {
+            background: #fffce0;
+            border: 2px solid #000;
+            padding: 8px 12px;
+            font-family: 'Permanent Marker', cursive;
+            font-size: 0.85rem;
+            line-height: 1.2;
+            color: #000;
+            z-index: 10;
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .caption-top { position: absolute; top: 0; left: 0; border-top: none; border-left: none; }
+        .caption-bottom { position: absolute; bottom: 0; right: 0; border-bottom: none; border-right: none; }
+
+        .bubble {
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 8px 12px;
+            font-family: 'Kalam', cursive;
+            font-weight: 700;
+            font-size: 0.8rem;
+            position: absolute;
+            max-width: 160px;
+            text-align: center;
+            z-index: 20;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
+        }
+
+        .bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #000 transparent;
+            display: block;
+            width: 0;
+        }
+
+        .nav-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+
+        .nav-btn {
+            background: var(--comic-red);
+            color: white;
+            border: 3px solid #000;
+            padding: 10px 25px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 4px 4px 0px #000;
+            letter-spacing: 1px;
+        }
+
+        .nav-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000;
+            background: #dc2626;
+        }
+
+        .btn-prev { background: #555; }
+
+        .title-card {
+            border: 4px solid #000;
+            padding: 2rem;
+            background: var(--comic-yellow);
+            transform: rotate(-1deg);
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="comic-container">
+            
+            <!-- Capa -->
+            <div class="page active" id="p0">
+                <div class="flex flex-col items-center justify-center h-full text-center p-6">
+                    <div class="title-card">
+                        <h1 class="text-6xl md:text-8xl text-red-600 font-bold leading-none family-bangers">A SAGA DO MALTE</h1>
+                        <p class="text-2xl font-bold bg-black text-white inline-block px-4 py-1 mt-2 uppercase">Os Pioneiros de Entre Rios</p>
+                    </div>
+                    <p class="text-xl max-w-lg font-bold text-gray-800 mt-8">Da Europa ao Colégio Visconde de Guarapuava: A épica jornada dos Suábios do Danúbio.</p>
+                </div>
+            </div>
+
+            <div class="page" id="p1">
+                <div class="panel-grid">
+                    <div class="comic-panel col-span-12 row-span-3" id="img_chegada">
+                        <div class="caption-box caption-top">Junho de 1951. O Porto de Santos recebe os primeiros 222 pioneiros suábios.</div>
+                        <div class="bubble top-16 right-10">Adeus, velho mundo. Brasil, aqui depositamos nossa esperança!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="p2">
+                <div class="panel-grid">
+                    <div class="comic-panel col-span-7 row-span-3" id="img_trem">
+                        <div class="caption-box caption-top">Seguimos pelos trilhos da Estrada de Ferro até a Estação de Góis Artigas.</div>
+                    </div>
+                    <div class="comic-panel col-span-5 row-span-3" id="img_caminhao">
+                        <div class="bubble bottom-10 left-4">O trajeto final é duro, de caminhão ou a pé.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="p3">
+                <div class="panel-grid">
+                    <div class="comic-panel col-span-12 row-span-3" id="img_colegio">
+                        <div class="caption-box caption-top">Guarapuava nos acolhe no Colégio de Aplicação Visconde de Guarapuava.</div>
+                        <div class="bubble top-20 left-10">Este é nosso abrigo provisório enquanto preparamos a terra.</div>
+                        <div class="caption-box caption-bottom" style="background: #000; color: #fff;">Entre 1951 e 1952, o Colégio foi o primeiro lar de muitos.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="p4">
+                <div class="panel-grid">
+                    <div class="comic-panel col-span-12 row-span-2" id="img_colonias">
+                        <div class="caption-box caption-top">Partimos para as cinco colônias: Vitória, Jordãozinho, Cachoeira, Socorro e Samambaia.</div>
+                        <div class="bubble bottom-4 right-10">Hora de erguer nossas casas e colonizar!</div>
+                    </div>
+                    <div class="comic-panel col-span-12 row-span-1" id="img_trabalho">
+                        <div class="caption-box caption-bottom">O trabalho braçal era a única forma de domar o campo.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="p5">
+                <div class="panel-grid">
+                    <div class="comic-panel col-span-6 row-span-3" id="img_uniao">
+                        <div class="caption-box caption-top">Somente unidos venceríamos. Nasce a Cooperativa Agrária.</div>
+                    </div>
+                    <div class="comic-panel col-span-6 row-span-3" id="img_cevada">
+                        <div class="bubble top-10 right-4">O malte da Agrária será conhecido no mundo todo!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="p6">
+                <div class="panel-grid">
+                    <div class="comic-panel col-span-12 row-span-3" id="img_fabrica">
+                        <div class="caption-box caption-top">Hoje, Entre Rios é a capital mundial do malte de excelência.</div>
+                        <div class="bubble bottom-10 left-10">Tecnologia de ponta com o DNA dos pioneiros!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="p7">
+                <div class="flex flex-col items-center justify-center h-full text-center">
+                    <div class="comic-panel w-full h-64 mb-4" id="img_brinde"></div>
+                    <h2 class="text-7xl text-red-600 font-bold family-bangers leading-none">PROST!</h2>
+                    <div class="bg-yellow-400 border-4 border-black p-4 rotate-1 mt-4">
+                        <p class="text-xl font-bold uppercase">A história dos suábios e da Agrária em cada gole.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="nav-bar">
+            <button class="nav-btn btn-prev" onclick="changePage(-1)" id="prevBtn" style="visibility: hidden">ANTERIOR</button>
+            <button class="nav-btn btn-next" onclick="changePage(1)" id="nextBtn">PRÓXIMO</button>
+        </div>
+    </div>
+
+    <script>
+        let current = 0;
+        const total = 7;
+
+        function changePage(step) {
+            const pages = document.querySelectorAll('.page');
+            pages[current].classList.remove('active');
+            current = (current + step + (total + 1)) % (total + 1);
+            pages[current].classList.add('active');
+            
+            document.getElementById('prevBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').innerText = current === total ? 'RECOMEÇAR' : 'PRÓXIMO';
+        }
+    </script>
+</body>
+</html>
